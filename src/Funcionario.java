@@ -2,13 +2,21 @@ import java.time.LocalDate;
 
 public class Funcionario extends Cidadao {
 
+	private String senha;
 	private UnidadeSaude unidadeSaude;
 	
-	public Funcionario(int numeroCNS, String nome, LocalDate dataNascimento, String cpf, UnidadeSaude unidadeSaude) {
+	public Funcionario(int numeroCNS, String nome, LocalDate dataNascimento, String cpf, String senha, UnidadeSaude unidadeSaude) {
 		super(numeroCNS, nome, dataNascimento, cpf);
+		setSenha(senha);
 		setUnidadeSaude(unidadeSaude);
 	}
 	
+	public String getSenha() {
+		return senha;
+	}
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
 	public UnidadeSaude getUnidadeSaude() {
 		return unidadeSaude;
 	}
