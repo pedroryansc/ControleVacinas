@@ -5,13 +5,15 @@ public class UnidadeSaude {
 	private String bairro;
 	private String cidade;
 	private String estado;
+	private String telefone;
 	
-	public UnidadeSaude(String nome, String rua, String bairro, String cidade, String estado) {
+	public UnidadeSaude(String nome, String rua, String bairro, String cidade, String estado, String telefone) {
 		setNome(nome);
 		setRua(rua);
 		setBairro(bairro);
 		setCidade(cidade);
 		setEstado(estado);
+		setTelefone(telefone);
 	}
 	
 	public String getNome() {
@@ -44,7 +46,13 @@ public class UnidadeSaude {
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
-	
+	public String getTelefone() {
+		return telefone;
+	}
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -58,6 +66,8 @@ public class UnidadeSaude {
 		builder.append(cidade);
 		builder.append(", estado=");
 		builder.append(estado);
+		builder.append(", telefone=");
+		builder.append(telefone);
 		builder.append("]");
 		return builder.toString();
 	}

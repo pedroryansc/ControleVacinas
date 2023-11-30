@@ -6,7 +6,7 @@ public class RegistroVacina {
 	private Lote lote;
 	private Cidadao cidadao;
 	private Funcionario vacinador;
-	private int dose;
+	private int dose = 0;
 	private UnidadeSaude unidadeSaude;
 	
 	public RegistroVacina(LocalDate data, Lote lote, Cidadao cidadao, Funcionario vacinador, int dose, UnidadeSaude unidadeSaude) {
