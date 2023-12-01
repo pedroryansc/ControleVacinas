@@ -389,7 +389,7 @@ public class Main {
 										int vacinador;
 										
 										do {
-											System.out.println("\nVacinador:");
+											System.out.println("\nVacinador(a):");
 											for(int i = 0; i < funcs.size(); i++)
 												System.out.println("(" + (i + 1) + ") " + funcs.get(i).getNome());
 											vacinador = entrada.nextInt();
