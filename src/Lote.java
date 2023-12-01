@@ -3,11 +3,13 @@ public class Lote {
 	private String codigo;
 	private String nomeVacina;
 	private String laboratorio;
+	private UnidadeSaude unidadeSaude;
 	
-	public Lote(String codigo, String nomeVacina, String laboratorio) {
+	public Lote(String codigo, String nomeVacina, String laboratorio, UnidadeSaude unidadeSaude) {
 		setCodigo(codigo);
 		setNomeVacina(nomeVacina);
 		setLaboratorio(laboratorio);
+		setUnidadeSaude(unidadeSaude);
 	}
 	
 	public String getCodigo() {
@@ -28,7 +30,13 @@ public class Lote {
 	public void setLaboratorio(String laboratorio) {
 		this.laboratorio = laboratorio;
 	}
-	
+	public UnidadeSaude getUnidadeSaude() {
+		return unidadeSaude;
+	}
+	public void setUnidadeSaude(UnidadeSaude unidadeSaude) {
+		this.unidadeSaude = unidadeSaude;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -38,6 +46,8 @@ public class Lote {
 		builder.append(nomeVacina);
 		builder.append(", laboratorio=");
 		builder.append(laboratorio);
+		builder.append(", unidadeSaude=");
+		builder.append(unidadeSaude);
 		builder.append("]");
 		return builder.toString();
 	}

@@ -10,12 +10,18 @@ public class Main {
 		// Criação do Administrador
 		
 		LocalDate data = LocalDate.parse("1978-04-24");
-		Administrador admin = new Administrador(2023261023, "Igor Kammer Grahl", data, "180.719.870-00", "12345");
+		Administrador admin1 = new Administrador(2023261023, "Igor Kammer Grahl", data, "180.719.870-00", "12345");
 		Cidadao cid1 = new Cidadao(2023261023, "Igor Kammer Grahl", data, "180.719.870-00");
+		
+		ArrayList<Administrador> admins = new ArrayList<Administrador>();
+		admins.add(admin1);
 		
 		// Criação da Unidade de Saúde
 		
 		UnidadeSaude usItuporanga = new UnidadeSaude("Unidade Sanitária Centro", "Rua Emílio Altemburg", "Centro", "Ituporanga", "Santa Catarina", "(47) 3533-3176");
+		
+		ArrayList<UnidadeSaude> unidades = new ArrayList<UnidadeSaude>();
+		unidades.add(usItuporanga);
 		
 		// Criação dos Funcionários
 		
@@ -42,8 +48,8 @@ public class Main {
 		cidadaos.add(cid3);
 		cidadaos.add(cid4);
 		
-		Lote lote1 = new Lote("210200", "Contra Gripe", "Butantan");
-		Lote lote2 = new Lote("FN9509", "Contra Covid-19", "Pfizer");
+		Lote lote1 = new Lote("210200", "Contra Gripe", "Butantan", usItuporanga);
+		Lote lote2 = new Lote("FN9509", "Contra Covid-19", "Pfizer", usItuporanga);
 		
 		ArrayList<Lote> lotes = new ArrayList<Lote>();
 		lotes.add(lote1);
@@ -72,11 +78,11 @@ public class Main {
 			
 			do {
 				System.out.println("O que você quer fazer?");
-				System.out.println("(1) Login \n(2) Cadastro \n(0) Encerrar sistema");
+				System.out.println("(1) Login \n(0) Encerrar sistema");
 				opcao = entrada.nextInt();
-				if(opcao < 0 || opcao > 2)
+				if(opcao < 0 || opcao > 1)
 					System.out.println("\nErro: Opção inválida\n");
-			} while(opcao < 0 || opcao > 2);
+			} while(opcao < 0 || opcao > 1);
 			
 			if(opcao > 0) {
 				if(opcao == 1) {
@@ -209,22 +215,19 @@ public class Main {
 									System.out.println("(1) Consultar suas vacinas");
 									System.out.println("(2) Consultar vacinas de cidadão");
 									System.out.println("(3) Cadastrar registro de vacina");
-									System.out.println("(4) Editar registro de vacina");
-									System.out.println("(5) Excluir registro de vacina");
-									System.out.println("(6) Consultar lote");
-									System.out.println("(7) Cadastrar lote");
-									System.out.println("(8) Editar lote");
-									System.out.println("(9) Excluir lote");
-									// System.out.println("(10) Editar perfil de acesso");
+									System.out.println("(4) Consultar lotes");
+									System.out.println("(5) Cadastrar lote");
 									System.out.println("(0) Sair");
 									resp = entrada.nextInt();
-									if(resp < 0 || resp > 9)
-										System.out.println("\nErro: Opção inválida\n");
-								} while(resp < 0 || resp > 9);
+									if(resp < 0 || resp > 5)
+										System.out.println("\nErro: Opção inválida");
+								} while(resp < 0 || resp > 5);
 								
 								if(resp == 1) {
 									
 									// Consulta de vacinas do funcionário
+									
+									System.out.println("\nMinhas Vacinas:");
 									
 									for(int i = 0; i < registros.size(); i++) {
 										if(funcs.get(usuario).getNumeroCNS() == registros.get(i).getCidadao().getNumeroCNS()) {
@@ -302,9 +305,17 @@ public class Main {
 									if(resp == 0)
 										condicao = false;
 								} else if(resp == 3) {
-									if(lotes.size() != 0) {
+									
+									for(int i = 0; i < lotes.size(); i++) {
+										if(funcs.get(usuario).getUnidadeSaude().getTelefone() == lotes.get(i).getUnidadeSaude().getTelefone())
+											cont++;
+									}
+									
+									if(cont > 0) {
 										
 										// Cadastro de registro de vacina
+										
+										cont = 0;
 										
 										String[] dataVetor = new String[3];
 										
@@ -350,7 +361,8 @@ public class Main {
 										do {
 											System.out.println("\nLote:");
 											for(int i = 0; i < lotes.size(); i++) {
-												System.out.println("(" + (i + 1) + ") " + lotes.get(i).getNomeVacina() + " (" + lotes.get(i).getCodigo() + ")");
+												if(funcs.get(usuario).getUnidadeSaude().getTelefone() == lotes.get(i).getUnidadeSaude().getTelefone())
+													System.out.println("(" + (i + 1) + ") " + lotes.get(i).getNomeVacina() + " (" + lotes.get(i).getCodigo() + ")");
 											}
 											lote = entrada.nextInt();
 											if(lote < 1 || lote > lotes.size())
@@ -374,15 +386,12 @@ public class Main {
 												System.out.println("\nErro: Número de CNS inexistente. Por favor, insira novamente");
 										}
 										
-										condicao1 = true;
-										
 										int vacinador;
 										
 										do {
 											System.out.println("\nVacinador:");
-											for(int i = 0; i < funcs.size(); i++) {
+											for(int i = 0; i < funcs.size(); i++)
 												System.out.println("(" + (i + 1) + ") " + funcs.get(i).getNome());
-											}
 											vacinador = entrada.nextInt();
 											if(vacinador < 1 || vacinador > funcs.size())
 												System.out.println("\nErro: Opção inválida");
@@ -418,17 +427,75 @@ public class Main {
 										
 									} else
 										System.out.print("\nNenhum lote foi encontrado. Primeiro, cadastre um lote de vacina \n");
+								
+								} else if(resp == 4) {
 									
-								} else if(resp == 0)
+									// Consulta de lotes
+									
+									System.out.println("\nLotes de Vacina de " + funcs.get(usuario).getUnidadeSaude().getNome());
+									
+									for(int i = 0; i < lotes.size(); i++) {
+										if(funcs.get(usuario).getUnidadeSaude().getTelefone() == lotes.get(i).getUnidadeSaude().getTelefone()) {
+											System.out.println("\nCódigo: " + lotes.get(i).getCodigo());
+											System.out.println("Vacina: " + lotes.get(i).getNomeVacina());
+											System.out.println("Laboratório: " + lotes.get(i).getLaboratorio());
+										}
+									}
+									
+									do {
+										System.out.println("\nO que você quer fazer?");
+										System.out.println("(1) Voltar \n(0) Sair (Desconectar)");
+										resp = entrada.nextInt();
+										if(resp < 0 || resp > 1)
+											System.out.println("\nErro: Opção inválida");
+									} while(resp < 0 || resp > 1);
+									
+									if(resp == 0)
+										condicao = false;
+								
+								} else if(resp == 5) {
+									
+									// Cadastro de lote
+									
+									System.out.println("\nCadasto de Lotes de Vacina \n");
+									
+									entrada.nextLine();
+									
+									System.out.println("Código:");
+									String codigo = entrada.nextLine();
+									
+									System.out.println("\nVacina:");
+									String vacina = entrada.nextLine();
+									
+									System.out.println("\nLaboratório:");
+									String laboratorio = entrada.nextLine();
+									
+									Lote lote = new Lote(codigo, vacina, laboratorio, funcs.get(usuario).getUnidadeSaude());
+									lotes.add(lote);
+									
+									System.out.println("\nCadastro realizado com sucesso!");
+									
+									do {
+										System.out.println("\nO que você quer fazer?");
+										System.out.println("(1) Voltar \n(0) Sair (Desconectar)");
+										resp = entrada.nextInt();
+										if(resp < 0 || resp > 1)
+											System.out.println("\nErro: Opção inválida");
+									} while(resp < 0 || resp > 1);
+									
+									if(resp == 0)
+										condicao = false;
+								
+								} else
 									condicao = false;
 							}
 						} else {
 							
 							// Login como administrador
 							
-							System.out.println("Login como Administrador: \n");
+							System.out.println("\nLogin como Administrador: \n");
 							
-							do {
+							while(condicao) {
 								System.out.println("Número de sua Carteira Nacional de Saúde: ");
 								numeroCNS = entrada.nextInt();
 								
@@ -436,11 +503,105 @@ public class Main {
 								
 								System.out.println("Senha: ");
 								senha = entrada.nextLine();
-								if(numeroCNS != admin.getNumeroCNS() || !(senha.equals(admin.getSenha())))
+								
+								for(int i = 0; i < admins.size(); i++) {
+									if(admins.get(i).getNumeroCNS() == numeroCNS && admins.get(i).getSenha().equals(senha)) {
+										condicao = false;
+										usuario = i;
+									}
+								}
+								if(condicao)
 									System.out.println("\nErro: Número de CNS e/ou senha inválida\n");
-							} while(numeroCNS != admin.getNumeroCNS() || !(senha.equals(admin.getSenha())));
+							}
 							
 							System.out.println("\nLogin realizado com sucesso!\n");
+							
+							// Menu do administrador
+							
+							System.out.println("Bem-vindo(a), " + admins.get(usuario).getNome());
+							
+							condicao = true;
+							
+							while(condicao) {
+								
+								do {
+									System.out.println("\nQual ação gostaria de realizar?");
+									System.out.println("(1) Consultar Unidades de Saúde");
+									System.out.println("(2) Cadastrar Unidade de Saúde");
+									System.out.println("(0) Sair");
+									resp = entrada.nextInt();
+									if(resp < 0 || resp > 2)
+										System.out.println("\nErro: Opção inválida");
+								} while(resp < 0 || resp > 2);
+								
+								if(resp == 1) {
+									
+									// Consulta de Unidades de Saúde
+									
+									System.out.println("\nUnidades de Saúde");
+									
+									for(int i = 0; i < unidades.size(); i++) {
+										System.out.println("\nNome: " + unidades.get(i).getNome());
+										System.out.println("Endereço: " + unidades.get(i).getRua() + ", " + unidades.get(i).getBairro() + " - " + unidades.get(i).getCidade() + " (" + unidades.get(i).getEstado() + ")");
+										System.out.println("Telefone: " + unidades.get(i).getTelefone());
+									}
+									
+									do {
+										System.out.println("\nO que você quer fazer?");
+										System.out.println("(1) Voltar \n(0) Sair (Desconectar)");
+										resp = entrada.nextInt();
+										if(resp < 0 || resp > 1)
+											System.out.println("\nErro: Opção inválida");
+									} while(resp < 0 || resp > 1);
+									
+									if(resp == 0)
+										condicao = false;
+									
+								} else if(resp == 2) {
+									
+									// Cadastro de Unidade de Saúde
+									
+									System.out.println("\nCadastro de Unidade de Saúde");
+									
+									entrada.nextLine();
+									
+									System.out.println("\nNome da Unidade:");
+									String nomeUnidade = entrada.nextLine();
+									
+									System.out.println("\nRua:");
+									String rua = entrada.nextLine();
+									
+									System.out.println("\nBairro:");
+									String bairro = entrada.nextLine();
+									
+									System.out.println("\nCidade:");
+									String cidade = entrada.nextLine();
+
+									System.out.println("\nEstado:");
+									String estado = entrada.nextLine();
+									
+									System.out.println("\nTelefone:");
+									String telefone = entrada.nextLine();
+									
+									UnidadeSaude us = new UnidadeSaude(nomeUnidade, rua, bairro, cidade, estado, telefone);
+									unidades.add(us);
+									
+									System.out.println("\nCadastro realizado com sucesso!");
+									
+									do {
+										System.out.println("\nO que você quer fazer?");
+										System.out.println("(1) Voltar \n(0) Sair (Desconectar)");
+										resp = entrada.nextInt();
+										if(resp < 0 || resp > 1)
+											System.out.println("\nErro: Opção inválida");
+									} while(resp < 0 || resp > 1);
+									
+									if(resp == 0)
+										condicao = false;
+									
+								} else
+									condicao = false;
+							}
 						}
 					}
 				}
